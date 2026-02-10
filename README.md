@@ -380,7 +380,7 @@ def max_subarray_sum_at_most_k(arr, k):
 
 ### Combinatorial
 
-#### 📌 2) Backtracking / Permutaties
+#### 📌 Backtracking / Permutaties
 
 Handig bij puzzel-achtige opgaven (bijvoorbeeld sokoban-achtige puzzles).
 
@@ -403,3 +403,145 @@ for perm in backtrack([], [1,2,3]):
 ```
 
 Gebruik dit ook om combinaties of plaatsen van objecten uit te proberen.
+
+
+## String manipulation / Other
+
+#### 📌 Frequency count of characters in a string
+
+```
+def char_frequency(s):
+    freq = {}
+    for c in s:
+        freq[c] = freq.get(c, 0) + 1
+    return freq
+```
+
+#### 📌 Simple substring search (brute force)
+
+```
+def find_substring(text, pattern):
+    n, m = len(text), len(pattern)
+    for i in range(n - m + 1):
+        if text[i:i+m] == pattern:
+            return i
+    return -1
+```
+
+#### 📌KMP algorithm for substring search
+
+```
+def kmp_search(text, pattern):
+    def build_lps(pattern):
+        lps = [0]*len(pattern)
+        length = 0
+        i = 1
+        while i < len(pattern):
+            if pattern[i] == pattern[length]:
+                length += 1
+                lps[i] = length
+                i += 1
+            else:
+                if length != 0:
+                    length = lps[length-1]
+                else:
+                    lps[i] = 0
+                    i += 1
+        return lps
+    lps = build_lps(pattern)
+    i = j = 0
+    while i < len(text):
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+        if j == len(pattern):
+            return i - j  # match found
+        elif i < len(text) and text[i] != pattern[j]:
+            if j != 0:
+                j = lps[j-1]
+            else:
+                i += 1
+    return -1
+```
+
+#### 📌Reverse a string
+
+```
+def reverse_string(s):
+    return s[::-1]
+```
+
+#### 📌Check if string is palindrome
+
+```
+def is_palindrome(s):
+    return s == s[::-1]
+```
+
+#### 📌 Binary search + bisect
+**Gebruik:** Snel zoeken of invoegen in een gesorteerde array.  
+
+**Wat gebeurt er:** `bisect_left` geeft positie terug waar een element kan worden toegevoegd zodat de array gesorteerd blijft.
+
+
+```
+import bisect
+
+arr = sorted([5,2,9])
+pos = bisect.bisect_left(arr, 7) # positie om 7 in te voegen
+```
+
+
+## Sorting
+
+#### 📌 Merge Sort
+
+```
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr)//2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    res = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            res.append(left[i])
+            i += 1
+        else:
+            res.append(right[j])
+            j += 1
+    res.extend(left[i:])
+    res.extend(right[j:])
+    return res
+```
+
+#### 📌 Quick Sort
+
+```
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr)//2]
+    left = [x for x in arr if x < pivot]
+    mid = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + mid + quick_sort(right)
+```
+
+#### 📌 Counting Sort (integers, O(n+k))
+
+```
+def counting_sort(arr):
+    if not arr:
+        return []
+    max_val = max(arr)
+    count = [0]*(max_val+1)
+    for x in arr:
+        count[x] += 1
+    res = []
+    for i, c in enumerate(count):
+        res.extend([i]*c)
+    return res
+```
