@@ -31,23 +31,9 @@ for _ in range(N):
 
 Handig bij puzzel-achtige opgaven (bijvoorbeeld sokoban-achtige puzzles).
 
-Gebruik:
+**Gebruik:** Voor het genereren van alle mogelijke volgordes, combinaties of puzzeloplossingen zoals Sokoban of Sudoku.  
+**Wat gebeurt er:** Recursief wordt elk element gekozen en toegevoegd aan het huidige pad; wanneer alle keuzes gebruikt zijn, wordt het pad “yielded”.
 
-Probleemtypen: alle mogelijke volgordes, combinaties of puzzels uitproberen, zoals Sokoban, sudoku, of kleine combinatorische zoekruimtes.
-
-Handig als de zoekruimte relatief klein is, omdat het exponentieel kan worden.
-
-Wat gebeurt er in de code:
-
-path houdt de huidige gekozen elementen bij.
-
-choices zijn de overgebleven opties om te kiezen.
-
-Basisgeval: if not choices: → alle keuzes zijn gemaakt, yield het pad.
-
-Anders: voor elk element c in choices, kies het, verwijder het uit de rest (choices[:i]+choices[i+1:]) en recursief verdergaan.
-
-yield from zorgt dat alle gegenereerde permutaties worden doorgegeven
 
 ```
 def backtrack(path, choices):
@@ -117,6 +103,9 @@ def dijkstra(adj, start):
 📌 5) Sieve van Eratosthenes (snelle priemtests)
 
 Als je met primes moet werken.
+**Gebruik:** Snel alle priemgetallen ≤ n vinden.  
+**Wat gebeurt er:** Een lijst houdt bij welke getallen prime zijn; veelvouden van elke prime worden uitgesloten.
+
 
 ```
 def sieve(n):
@@ -132,6 +121,9 @@ def sieve(n):
 📌 6) Combinaties & Permutaties (built-in)
 
 Handig als je geen handmatige backtrack wilt.
+**Gebruik:** Snel alle combinaties of permutaties genereren zonder handmatige backtracking.  
+**Wat gebeurt er:** `itertools.combinations` genereert subsets van vaste grootte; `itertools.permutations` genereert alle volgordes.
+
 
 ```
 import itertools
@@ -146,6 +138,9 @@ for perm in itertools.permutations([1,2,3]):
 📌 7) Dynamische programmering — voorbeeld sub-string of knapsack
 
 Makkelijk aan te passen naar echte contest-vragen.
+**Gebruik:** Optimalisatieproblemen zoals knapsack, substrings of subsequences.  
+**Wat gebeurt er:** `dp[i][j]` houdt de maximale waarde bij voor de eerste i items en capaciteit j; voor elk item wordt gekeken of opnemen beter is dan niet opnemen.
+
 
 ```
 # klassieke knapsack (waarden en gewichten)
@@ -164,6 +159,9 @@ def knapsack(weights, values, W):
 📌 8) Snelle input + automatische type‑conversie
 
 Dit helpt bij veel testcases met grote data.
+**Gebruik:** Voor snelle parsing van grote inputdata bij veel testcases.  
+**Wat gebeurt er:** Alle input wordt ingelezen als bytes, opgesplitst, en door een iterator gehaald; `ni()` en `ns()` geven respectievelijk int of string.
+
 
 ```
 import sys
@@ -180,6 +178,9 @@ Gebruik ni() en ns() voor snelle parsing zonder veel boilerplate.
 📌 9) Grid‑BFS + richtingenbord
 
 Nuttig voor labyrinth/grid‑problemen:
+**Gebruik:** Kortste pad of bereikbaarheid in een grid of labyrinth.  
+**Wat gebeurt er:** BFS loopt over de grid, houdt afstand bij in een dictionary en negeert muren of reeds bezochte cellen.
+
 
 ```
 from collections import deque
@@ -202,6 +203,10 @@ def bfs_grid(start, grid):
 
 📌 10) Nim‑winnende zetten (voorbeeld uit VPW 2017)
 
+**Gebruik:** Speltheorie – alle zetten vinden die naar een winnende positie leiden.  
+**Wat gebeurt er:** Nim-sum wordt berekend, en voor elke stapel wordt gecontroleerd of aanpassen leidt tot een winnende configuratie.
+
+
 ```
 def winning_moves(piles):
     xor_val = 0
@@ -219,6 +224,10 @@ def winning_moves(piles):
 
 📌 11) Ontbrekend element in reeks (VPW 2017)
 
+**Gebruik:** Vind het ontbrekende getal in een rij 1..n.  
+**Wat gebeurt er:** Som van 1..n berekend en verschil genomen met huidige som om het ontbrekende element te vinden.
+
+
 ```
 def missing_number(arr):
     n = len(arr) + 1
@@ -231,6 +240,9 @@ def missing_number(arr):
 📌 12) Union‑Find (disjoint set)
 
 Handig voor connectiviteitsproblemen:
+**Gebruik:** Connectiviteitsproblemen, componentdetectie of cyclusdetectie in grafen.  
+**Wat gebeurt er:** `find` zoekt de root van een element (met path compression), `union` verbindt twee sets.
+
 
 ```
 class UF:
@@ -249,6 +261,9 @@ class UF:
 📌 13) Topologische sort
 
 Als er een dependency‑graaf is:
+**Gebruik:** Taken met afhankelijkheden, zoals projecten of opdrachten.  
+**Wat gebeurt er:** BFS-achtige methode die knopen met indegree 0 in volgorde verwerkt; levert een topologische volgorde voor een DAG.
+
 
 ```
 from collections import deque
@@ -273,6 +288,9 @@ def topo_sort(n, adj):
 📌 14) Sliding window / two pointers
 
 Voor array‑problemen met subranges:
+**Gebruik:** Problemen met subarrays, limieten of maximale sommen.  
+**Wat gebeurt er:** Twee pointers schuiven over array; houd de som bij en pas aan wanneer limiet overschreden wordt.
+
 
 ```
 def max_subarray_sum_at_most_k(arr, k):
@@ -290,6 +308,10 @@ def max_subarray_sum_at_most_k(arr, k):
 
 📌 15) Binary search + bisect
 
+**Gebruik:** Snel zoeken of invoegen in een gesorteerde array.  
+**Wat gebeurt er:** `bisect_left` geeft positie terug waar een element kan worden toegevoegd zodat de array gesorteerd blijft.
+
+
 ```
 import bisect
 
@@ -299,6 +321,10 @@ pos = bisect.bisect_left(arr, 7) # positie om 7 in te voegen
 
 
 📌 16) Prime factorisatie (snelle trial)
+
+**Gebruik:** Alle priemfactoren van een getal vinden.  
+**Wat gebeurt er:** Iteratief delen door priemgetallen; elke factor wordt toegevoegd aan de lijst; eventuele resterende n > 1 is ook een factor.
+
 
 ```
 def prime_factors(n):
@@ -316,6 +342,10 @@ def prime_factors(n):
 
 📌 17) Bitmask‑subset iteratie
 
+**Gebruik:** Alle subsets genereren van een set, handig voor combinatorische problemen.  
+**Wat gebeurt er:** Loop over alle mogelijke bitmasks; elk mask representeert een subset van indices waar de bit 1 staat.
+
+
 Handig bij combinatorische problemen:
 
 ```
@@ -325,6 +355,10 @@ def subsets_mask(n):
 ```
 
 📌 18) Shortest path (BFS voor unweighted)
+
+**Gebruik:** Kortste pad in een ongewogen graf.  
+**Wat gebeurt er:** BFS houdt afstand bij vanaf startknoop; elke nieuwe knoop wordt toegevoegd met afstand +1.
+
 
 ```
 from collections import deque
@@ -342,6 +376,9 @@ def shortest_unweighted(adj, start):
 ```
 
 📌 19) Recursie met memo (cache)
+
+**Gebruik:** Vermijden van dubbele berekeningen in recursieve functies (Fibonacci, DP).  
+**Wat gebeurt er:** `lru_cache` slaat eerdere resultaten op; functie rekent alleen nieuwe waarden uit.
 
 ```
 from functools import lru_cache
