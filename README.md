@@ -31,6 +31,24 @@ for _ in range(N):
 
 Handig bij puzzel-achtige opgaven (bijvoorbeeld sokoban-achtige puzzles).
 
+Gebruik:
+
+Probleemtypen: alle mogelijke volgordes, combinaties of puzzels uitproberen, zoals Sokoban, sudoku, of kleine combinatorische zoekruimtes.
+
+Handig als de zoekruimte relatief klein is, omdat het exponentieel kan worden.
+
+Wat gebeurt er in de code:
+
+path houdt de huidige gekozen elementen bij.
+
+choices zijn de overgebleven opties om te kiezen.
+
+Basisgeval: if not choices: → alle keuzes zijn gemaakt, yield het pad.
+
+Anders: voor elk element c in choices, kies het, verwijder het uit de rest (choices[:i]+choices[i+1:]) en recursief verdergaan.
+
+yield from zorgt dat alle gegenereerde permutaties worden doorgegeven
+
 ```
 def backtrack(path, choices):
     if not choices:
