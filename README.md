@@ -11,7 +11,7 @@
 
 Competitie-problemen hebben vaak veel inputdata — lees alles in één keer.
 
-'''
+```
 import sys
 
 data = sys.stdin.read().strip().split()
@@ -23,13 +23,13 @@ N = int(next(it))
 for _ in range(N):
     x = int(next(it))
     # verwerk x
-'''
+```
 
 📌 2) Backtracking / Permutaties
 
 Handig bij puzzel-achtige opgaven (bijvoorbeeld sokoban-achtige puzzles).
 
-'''
+```
 def backtrack(path, choices):
     if not choices:
         yield path
@@ -40,7 +40,7 @@ def backtrack(path, choices):
 # gebruik
 for perm in backtrack([], [1,2,3]):
     print(perm)
-'''
+```
 
 Gebruik dit ook om combinaties of plaatsen van objecten uit te proberen.
 
@@ -48,7 +48,7 @@ Gebruik dit ook om combinaties of plaatsen van objecten uit te proberen.
 
 Velden als mijnenveld, sokoban of kortste pad komen vaak voor.
 
-'''
+```
 from collections import deque
 
 # BFS voorbeeld (kortste pad op een grid of graf)
@@ -71,13 +71,13 @@ def dfs(node, neighbors, visited=None):
         if nxt not in visited:
             dfs(nxt, neighbors, visited)
     return visited
-'''
+```
 
 📌 4) Dijkstra voor gewogen grafen
 
 Als een opgave kortste paden met gewichten vraagt.
 
-'''
+```
 import heapq
 
 def dijkstra(adj, start):
@@ -92,13 +92,13 @@ def dijkstra(adj, start):
                 dist[v] = nd
                 heapq.heappush(pq, (nd, v))
     return dist
-'''
+```
 
 📌 5) Sieve van Eratosthenes (snelle priemtests)
 
 Als je met primes moet werken.
 
-'''
+```
 def sieve(n):
     isprime = [True]*(n+1)
     isprime[0] = isprime[1] = False
@@ -107,13 +107,13 @@ def sieve(n):
             for j in range(i*i, n+1, i):
                 isprime[j] = False
     return [i for i, p in enumerate(isprime) if p]
-'''
+```
 
 📌 6) Combinaties & Permutaties (built-in)
 
 Handig als je geen handmatige backtrack wilt.
 
-'''
+```
 import itertools
 
 for comb in itertools.combinations([1,2,3,4], 2):
@@ -121,13 +121,13 @@ for comb in itertools.combinations([1,2,3,4], 2):
 
 for perm in itertools.permutations([1,2,3]):
     print(perm)
-'''
+```
 
 📌 7) Dynamische programmering — voorbeeld sub-string of knapsack
 
 Makkelijk aan te passen naar echte contest-vragen.
 
-'''
+```
 # klassieke knapsack (waarden en gewichten)
 def knapsack(weights, values, W):
     n = len(weights)
@@ -139,4 +139,4 @@ def knapsack(weights, values, W):
             if j >= w:
                 dp[i][j] = max(dp[i][j], dp[i-1][j-w] + v)
     return dp[n][W]
-'''
+```
