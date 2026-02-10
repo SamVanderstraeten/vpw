@@ -1,11 +1,146 @@
 # Mythical Man Moth @VPW
 
-## TODO
+## Debugging Python Scripts with stdin in VS Code
 
-- Feed all previous exercises to Chad
-- Compile Top 20 list of most useful algorithms
-- Debug application when running from terminal
+When working on contest problems, your Python scripts usually read from **stdin** and write to **stdout**. To debug these scripts in VS Code while inspecting variables and stepping through code, you can use an **input file**.
 
+---
+
+### 1. Create a Test Input File
+
+Create a file called `input.txt` in your project folder:
+
+```
+3
+1 2 3
+4 5 6
+7 8 9
+```
+
+This file will simulate the contest input.
+
+---
+
+### 2. Redirect stdin in Your Script
+
+At the top of your Python script, add:
+
+```python
+import sys
+
+sys.stdin = open("input.txt", "r")  # redirect stdin to the input file
+
+data = sys.stdin.read().split()
+it = iter(data)
+
+def ni(): return int(next(it))
+def ns(): return next(it)
+```
+
+Now your code will read input from `input.txt` instead of waiting for manual input.
+
+---
+
+### 3. Configure VS Code Debugging
+
+1. Open `.vscode/launch.json` (create it if it doesn’t exist).  
+2. Add a configuration like this:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Debug with Input",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": [],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "redirectOutput": false
+        }
+    ]
+}
+```
+
+3. Set breakpoints in your code wherever you want to inspect variables.  
+4. Start debugging with the green "Run and Debug" button.
+
+---
+
+### 4. Tips for Debugging Contest Scripts
+
+- **Hover over variables** to see their current values.  
+- **Use the Debug Console** to evaluate expressions or modify variables.  
+- **Conditional breakpoints**: stop only when a variable reaches a specific value (e.g., `i == 1000`).  
+- **Step into/over** loops to follow algorithm execution.  
+
+---
+
+### 5. Ready-to-Use Template Example
+
+```python
+import sys
+
+# Redirect stdin for debugging
+sys.stdin = open("input.txt", "r")
+
+# Fast input parsing
+data = sys.stdin.read().split()
+it = iter(data)
+def ni(): return int(next(it))
+def ns(): return next(it)
+
+# Example usage
+T = ni()
+for _ in range(T):
+    x = ni()
+    print(x)
+```
+
+- Keep the `sys.stdin = open("input.txt", "r")` line **only for local debugging**.  
+- Remove or comment it out when submitting code to the contest, as the judge will provide stdin automatically.
+
+
+
+
+## Code Snippets Table of contents
+- **Code snippets**
+  - [Helper functions](#helper-functions)
+    - [Snelle I/O voor wedstrijden](#snelle-io-voor-wedstrijden)
+    - [Snelle input + automatische type‑conversie](#snelle-input--automatische-type-conversie)
+    - [Combinaties & Permutaties (built-in)](#combinaties--permutaties-built-in)
+    - [Bitmask‑subset iteratie](#bitmasksubset-iteratie)
+    - [Recursie met memo (cache)](#recursie-met-memo-cache)
+  - [Graphs](#graphs)
+    - [DFS & BFS voor grafen](#dfs--bfs-voor-grafen)
+    - [Dijkstra voor gewogen grafen](#dijkstra-voor-gewogen-grafen)
+    - [Grid‑BFS + richtingenbord](#gridbfs--richtingenbord)
+    - [Shortest path (BFS voor unweighted)](#shortest-path-bfs-voor-unweighted)
+    - [Union‑Find (disjoint set)](#unionfind-disjoint-set)
+    - [Topologische sort](#topologische-sort)
+  - [Mathematical / Number theory](#mathematical--number-theory)
+    - [Sieve van Eratosthenes (snelle priemtests)](#sieve-van-eratosthenes-snelle-priemtests)
+    - [Nim‑winnende zetten (voorbeeld uit VPW 2017)](#nimwinnende-zetten-voorbeeld-uit-vpw-2017)
+    - [Ontbrekend element in reeks (VPW 2017)](#ontbrekend-element-in-reeks-vpw-2017)
+    - [Prime factorisatie (snelle trial)](#prime-factorisatie-snelle-trial)
+  - [Dynamic Programming / Optimization](#dynamic-programming--optimization)
+    - [Dynamische programmering — voorbeeld sub-string of knapsack](#dynamische-programmering--voorbeeld-sub-string-of-knapsack)
+    - [Sliding window / two pointers](#sliding-window--two-pointers)
+  - [Combinatorial](#combinatorial)
+    - [Backtracking / Permutaties](#backtracking--permutaties)
+  - [String manipulation / Other](#string-manipulation--other)
+    - [Frequency count of characters in a string](#frequency-count-of-characters-in-a-string)
+    - [Simple substring search (brute force)](#simple-substring-search-brute-force)
+    - [KMP algorithm for substring search](#kmp-algorithm-for-substring-search)
+    - [Reverse a string](#reverse-a-string)
+    - [Check if string is palindrome](#check-if-string-is-palindrome)
+    - [Binary search + bisect](#binary-search--bisect)
+  - [Sorting](#sorting)
+    - [Merge Sort](#merge-sort)
+    - [Quick Sort](#quick-sort)
+    - [Counting Sort (integers, onk)](#counting-sort-integers-onk)
 
 ## Code snippets
 
@@ -15,7 +150,7 @@
 
 Competitie-problemen hebben vaak veel inputdata — lees alles in één keer.
 
-```
+```python
 import sys
 
 data = sys.stdin.read().strip().split()
@@ -39,7 +174,7 @@ Dit helpt bij veel testcases met grote data.
 **Wat gebeurt er:** Alle input wordt ingelezen als bytes, opgesplitst, en door een iterator gehaald; `ni()` en `ns()` geven respectievelijk int of string.
 
 
-```
+```python
 import sys
 
 data = sys.stdin.buffer.read().split()
@@ -60,7 +195,7 @@ Handig als je geen handmatige backtrack wilt.
 **Wat gebeurt er:** `itertools.combinations` genereert subsets van vaste grootte; `itertools.permutations` genereert alle volgordes.
 
 
-```
+```python
 import itertools
 
 for comb in itertools.combinations([1,2,3,4], 2):
@@ -79,7 +214,7 @@ for perm in itertools.permutations([1,2,3]):
 
 Handig bij combinatorische problemen:
 
-```
+```python
 def subsets_mask(n):
     for mask in range(1<<n):
         yield [i for i in range(n) if mask & (1<<i)]
@@ -91,7 +226,7 @@ def subsets_mask(n):
 
 **Wat gebeurt er:** `lru_cache` slaat eerdere resultaten op; functie rekent alleen nieuwe waarden uit.
 
-```
+```python
 from functools import lru_cache
 
 @lru_cache(None)
@@ -108,7 +243,7 @@ def f(x):
 
 Velden als mijnenveld, sokoban of kortste pad komen vaak voor.
 
-```
+```python
 from collections import deque
 
 # BFS voorbeeld (kortste pad op een grid of graf)
@@ -137,7 +272,7 @@ def dfs(node, neighbors, visited=None):
 
 Als een opgave kortste paden met gewichten vraagt.
 
-```
+```python
 import heapq
 
 def dijkstra(adj, start):
@@ -163,7 +298,7 @@ Nuttig voor labyrinth/grid‑problemen:
 **Wat gebeurt er:** BFS loopt over de grid, houdt afstand bij in een dictionary en negeert muren of reeds bezochte cellen.
 
 
-```
+```python
 from collections import deque
 
 dirs = [(1,0),(-1,0),(0,1),(0,-1)]
@@ -191,7 +326,7 @@ def bfs_grid(start, grid):
 **Wat gebeurt er:** BFS houdt afstand bij vanaf startknoop; elke nieuwe knoop wordt toegevoegd met afstand +1.
 
 
-```
+```python
 from collections import deque
 
 def shortest_unweighted(adj, start):
@@ -213,7 +348,7 @@ Handig voor connectiviteitsproblemen:
 **Wat gebeurt er:** `find` zoekt de root van een element (met path compression), `union` verbindt twee sets.
 
 
-```
+```python
 class UF:
     def __init__(self,n):
         self.p = list(range(n))
@@ -234,7 +369,7 @@ Als er een dependency‑graaf is:
 **Wat gebeurt er:** BFS-achtige methode die knopen met indegree 0 in volgorde verwerkt; levert een topologische volgorde voor een DAG.
 
 
-```
+```python
 from collections import deque
 
 def topo_sort(n, adj):
@@ -263,7 +398,7 @@ Als je met primes moet werken.
 **Wat gebeurt er:** Een lijst houdt bij welke getallen prime zijn; veelvouden van elke prime worden uitgesloten.
 
 
-```
+```python
 def sieve(n):
     isprime = [True]*(n+1)
     isprime[0] = isprime[1] = False
@@ -282,7 +417,7 @@ def sieve(n):
 **Wat gebeurt er:** Nim-sum wordt berekend, en voor elke stapel wordt gecontroleerd of aanpassen leidt tot een winnende configuratie.
 
 
-```
+```python
 def winning_moves(piles):
     xor_val = 0
     for p in piles:
@@ -303,7 +438,7 @@ def winning_moves(piles):
 **Wat gebeurt er:** Som van 1..n berekend en verschil genomen met huidige som om het ontbrekende element te vinden.
 
 
-```
+```python
 def missing_number(arr):
     n = len(arr) + 1
     full_sum = n*(n+1)//2
@@ -318,7 +453,7 @@ def missing_number(arr):
 **Wat gebeurt er:** Iteratief delen door priemgetallen; elke factor wordt toegevoegd aan de lijst; eventuele resterende n > 1 is ook een factor.
 
 
-```
+```python
 def prime_factors(n):
     i=2
     res=[]
@@ -341,7 +476,7 @@ Makkelijk aan te passen naar echte contest-vragen.
 **Wat gebeurt er:** `dp[i][j]` houdt de maximale waarde bij voor de eerste i items en capaciteit j; voor elk item wordt gekeken of opnemen beter is dan niet opnemen.
 
 
-```
+```python
 # klassieke knapsack (waarden en gewichten)
 def knapsack(weights, values, W):
     n = len(weights)
@@ -363,7 +498,7 @@ Voor array‑problemen met subranges:
 **Wat gebeurt er:** Twee pointers schuiven over array; houd de som bij en pas aan wanneer limiet overschreden wordt.
 
 
-```
+```python
 def max_subarray_sum_at_most_k(arr, k):
     left=0
     curr=0
@@ -389,7 +524,7 @@ Handig bij puzzel-achtige opgaven (bijvoorbeeld sokoban-achtige puzzles).
 **Wat gebeurt er:** Recursief wordt elk element gekozen en toegevoegd aan het huidige pad; wanneer alle keuzes gebruikt zijn, wordt het pad “yielded”.
 
 
-```
+```python
 def backtrack(path, choices):
     if not choices:
         yield path
@@ -409,7 +544,7 @@ Gebruik dit ook om combinaties of plaatsen van objecten uit te proberen.
 
 #### 📌 Frequency count of characters in a string
 
-```
+```python
 def char_frequency(s):
     freq = {}
     for c in s:
@@ -419,7 +554,7 @@ def char_frequency(s):
 
 #### 📌 Simple substring search (brute force)
 
-```
+```python
 def find_substring(text, pattern):
     n, m = len(text), len(pattern)
     for i in range(n - m + 1):
@@ -430,7 +565,7 @@ def find_substring(text, pattern):
 
 #### 📌KMP algorithm for substring search
 
-```
+```python
 def kmp_search(text, pattern):
     def build_lps(pattern):
         lps = [0]*len(pattern)
@@ -466,14 +601,14 @@ def kmp_search(text, pattern):
 
 #### 📌Reverse a string
 
-```
+```python
 def reverse_string(s):
     return s[::-1]
 ```
 
 #### 📌Check if string is palindrome
 
-```
+```python
 def is_palindrome(s):
     return s == s[::-1]
 ```
@@ -484,7 +619,7 @@ def is_palindrome(s):
 **Wat gebeurt er:** `bisect_left` geeft positie terug waar een element kan worden toegevoegd zodat de array gesorteerd blijft.
 
 
-```
+```python
 import bisect
 
 arr = sorted([5,2,9])
@@ -496,7 +631,7 @@ pos = bisect.bisect_left(arr, 7) # positie om 7 in te voegen
 
 #### 📌 Merge Sort
 
-```
+```python
 def merge_sort(arr):
     if len(arr) <= 1:
         return arr
@@ -519,7 +654,7 @@ def merge_sort(arr):
 
 #### 📌 Quick Sort
 
-```
+```python
 def quick_sort(arr):
     if len(arr) <= 1:
         return arr
@@ -532,7 +667,7 @@ def quick_sort(arr):
 
 #### 📌 Counting Sort (integers, O(n+k))
 
-```
+```python
 def counting_sort(arr):
     if not arr:
         return []
