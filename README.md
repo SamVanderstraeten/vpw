@@ -25,6 +25,24 @@ This file will simulate the contest input.
 
 At the top of your Python script, add:
 
+``````python
+import sys
+
+# Redirect stdin to the file for debugging
+sys.stdin = open("input.txt", "r")
+
+# Read the number of lines
+N = int(sys.stdin.readline())
+
+# Process each line one by one
+for _ in range(N):
+    line = sys.stdin.readline().strip()  # remove trailing newline
+    numbers = list(map(int, line.split()))  # convert space-separated numbers to integers
+    print(numbers)  # example: print or process the line
+```
+
+
+
 ```python
 import sys
 
