@@ -1,3 +1,5 @@
+import sys
+
 def dijkstra_time(graph, start, end):
     return 0
 
