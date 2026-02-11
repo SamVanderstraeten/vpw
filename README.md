@@ -25,7 +25,7 @@ This file will simulate the contest input.
 
 At the top of your Python script, add:
 
-``````python
+```python
 import sys
 
 # Redirect stdin to the file for debugging
